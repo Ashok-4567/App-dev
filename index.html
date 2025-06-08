@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Home- Finance Advisor Pro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="styles/style.css" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#1E3A8A',
+            secondary: '#10B981',
+            accent: '#F59E0B',
+            background: '#F3F4F6',
+            card: '#FFFFFF',
+            textPrimary: '#1F2937',
+            textSecondary: '#4B5563'
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-background font-sans text-textPrimary">
+
+   <header class="bg-primary text-white shadow relative z-50">
+  <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+    <div class="flex items-center space-x-2 text-xl font-bold">
+      <i class="fas fa-chart-line text-white"></i>
+      <span>Finance Advisor Pro</span>
+    </div>
+    <!-- Hamburger Button -->
+    <button id="menu-toggle" class="sm:hidden text-2xl focus:outline-none">
+      <i class="fas fa-bars"></i>
+    </button>
+    <!-- Navigation Menu -->
+    <nav id="nav-menu" class="hidden sm:flex flex-col sm:flex-row sm:items-center sm:space-x-4 absolute sm:static top-full left-0 w-full sm:w-auto bg-primary sm:bg-transparent px-4 sm:px-0 py-4 sm:py-0">
+      <a href="index.html" class="block px-4 py-2 rounded hover:bg-white/10 font-semibold bg-green-500 sm:bg-transparent sm:text-white">Home</a>
+      <a href="manage-finances.html" class="block px-4 py-2 rounded hover:bg-white/10">Manage Finances</a>
+      <a href="analytics.html" class="block px-4 py-2 rounded hover:bg-white/10">Analytics</a>
+      <a href="aboutus.html" class="block px-4 py-2 rounded hover:bg-white/10">About Us</a>
+      <a href="auth_modal.html" class="block px-4 py-2 rounded hover:bg-white/10">Sign In</a>
+      <a href="auth_modal.html" class="block px-4 py-2 rounded bg-accent text-white font-bold hover:bg-yellow-500">Sign Up</a>
+    </nav>
+  </div>
+</header>
+
+  <main class="container mx-auto px-4 py-10">
+    <section class="hero text-center mb-10">
+      <h1 class="text-4xl font-bold mb-2 text-primary">Welcome to Finance Advisor Pro</h1>
+      <p class="text-lg mb-4 text-textSecondary">Your personal guide to smart financial management and insights.</p>
+      <a href="manage-finances.html" class="inline-block bg-secondary text-white font-semibold px-6 py-3 rounded-lg hover:bg-green-600 transition">Get Started</a>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="text-2xl font-semibold text-center mb-6">Key Features</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white shadow-md p-6 rounded-lg text-center">
+          <i class="fas fa-wallet text-3xl text-primary mb-4"></i>
+          <h3 class="text-xl font-semibold mb-2">Manage Finances</h3>
+          <p class="text-sm text-textSecondary mb-3">Easily track your income, expenses, and investments with our intuitive CRUD interface.</p>
+          <a href="manage-finances.html" class="text-secondary font-semibold hover:underline">Track Records</a>
+        </div>
+        <div class="bg-white shadow-md p-6 rounded-lg text-center">
+          <i class="fas fa-chart-pie text-3xl text-primary mb-4"></i>
+          <h3 class="text-xl font-semibold mb-2">Data Analytics</h3>
+          <p class="text-sm text-textSecondary mb-3">Visualize your financial data with interactive charts to understand your spending and investment patterns.</p>
+          <a href="analytics.html" class="text-secondary font-semibold hover:underline">View Analytics</a>
+        </div>
+        <div class="bg-white shadow-md p-6 rounded-lg text-center">
+          <i class="fas fa-info-circle text-3xl text-primary mb-4"></i>
+          <h3 class="text-xl font-semibold mb-2">About Us</h3>
+          <p class="text-sm text-textSecondary mb-3">Learn more about the developer, the technology stack, and the journey of building this application.</p>
+          <a href="aboutus.html" class="text-secondary font-semibold hover:underline">Learn More</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="text-center max-w-3xl mx-auto">
+      <h2 class="text-2xl font-semibold mb-4">Take Control of Your Finances</h2>
+      <p class="text-textSecondary mb-6">Finance Advisor Pro is designed to provide a clear and straightforward way to manage your financial life. Whether you're looking to budget more effectively, track your investments, or understand your cash flow, our tools are here to help you achieve your financial goals.</p>
+      <div class="image-wrapper">
+        <img src="https://picsum.photos/seed/finance/600/300" alt="Financial charts and graphs" class="rounded-lg mx-auto shadow" loading="lazy" />
+      </div>
+    </section>
+  </main>
+
+  <!-- ✅ Footer -->
+  <footer class="site-footer mt-10">
+    <p>&copy; 2025 Finance Advisor Pro. All rights reserved.</p>
+    <p class="footer-sub">Empowering Your Financial Journey</p>
+  </footer>
+
+  <script>
+    document.getElementById('menu-toggle').addEventListener('click', function () {
+      const menu = document.getElementById('nav-menu');
+      menu.classList.toggle('hidden');
+    });
+  </script>
+</body>
+</html>

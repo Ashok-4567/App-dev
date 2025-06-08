@@ -1,0 +1,315 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Manage Finances - Finance Advisor Pro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="styles/style.css" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#1E3A8A',
+            secondary: '#10B981',
+            accent: '#F59E0B',
+            background: '#F3F4F6',
+            card: '#FFFFFF',
+            textPrimary: '#1F2937',
+            textSecondary: '#4B5563'
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-background font-sans text-textPrimary">
+
+   <header class="bg-primary text-white shadow relative z-50">
+  <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+    <div class="flex items-center space-x-2 text-xl font-bold">
+      <i class="fas fa-chart-line text-white"></i>
+      <span>Finance Advisor Pro</span>
+    </div>
+    <!-- Hamburger Button -->
+    <button id="menu-toggle" class="sm:hidden text-2xl focus:outline-none">
+      <i class="fas fa-bars"></i>
+    </button>
+    <!-- Navigation Menu -->
+    <nav id="nav-menu" class="hidden sm:flex flex-col sm:flex-row sm:items-center sm:space-x-4 absolute sm:static top-full left-0 w-full sm:w-auto bg-primary sm:bg-transparent px-4 sm:px-0 py-4 sm:py-0">
+      <a href="index.html" class="block px-4 py-2 rounded hover:bg-white/10 font-semibold bg-green-500 sm:bg-transparent sm:text-white">Home</a>
+      <a href="manage-finances.html" class="block px-4 py-2 rounded hover:bg-white/10">Manage Finances</a>
+      <a href="analytics.html" class="block px-4 py-2 rounded hover:bg-white/10">Analytics</a>
+      <a href="aboutus.html" class="block px-4 py-2 rounded hover:bg-white/10">About Us</a>
+      <a href="auth_modal.html" class="block px-4 py-2 rounded hover:bg-white/10">Sign In</a>
+      <a href="auth_modal.html" class="block px-4 py-2 rounded bg-accent text-white font-bold hover:bg-yellow-500">Sign Up</a>
+    </nav>
+  </div>
+</header>
+
+ 
+
+<!-- ✅ Also include this CSS block inside your <style> or link your existing index.css -->
+<style>
+  .navbar {
+    background-color: #1E3A8A;
+    padding: 1rem 2rem;
+    color: white;
+  }
+
+  .navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+  }
+
+  .logo i {
+    margin-right: 0.5rem;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .nav-links a {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: 500;
+  }
+
+  .nav-links a:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+  }
+
+  .nav-links .active {
+    background-color: #10B981;
+    font-weight: bold;
+  }
+
+  .signup-btn {
+    background-color: #F59E0B;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  .signup-btn:hover {
+    background-color: #d97706;
+  }
+
+  .site-footer {
+    background-color: #1E3A8A;
+    color: white;
+    text-align: center;
+    padding: 1.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .footer-sub {
+    font-style: italic;
+    font-size: 0.95rem;
+    margin-top: 0.5rem;
+  }
+</style>
+
+<body class="bg-background font-sans text-textPrimary">
+
+<main class="max-w-6xl mx-auto p-6 my-10">
+  <div class="flex flex-col sm:flex-row justify-between items-center mb-6 pb-4 border-b border-gray-300">
+    <h1 class="text-3xl font-bold text-primary mb-4 sm:mb-0">Manage Financial Records</h1>
+    <button onclick="openModal()" class="bg-secondary text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-600 transition-colors duration-300 shadow-md flex items-center">
+      <i class="fas fa-plus mr-2"></i> Add New Record
+    </button>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6" id="summaryCards"></div>
+
+  <!-- Records Table -->
+  <div class="bg-card shadow-xl rounded-lg overflow-x-auto" id="recordsTableContainer"></div>
+</main>
+
+<!-- Modal -->
+<div id="modalBackdrop" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center p-4 z-50">
+  <div class="bg-card p-6 rounded-lg shadow-2xl w-full max-w-md space-y-4">
+    <h2 id="modalTitle" class="text-2xl font-bold text-primary">Add Financial Record</h2>
+    <form id="recordForm" class="space-y-4">
+      <input type="hidden" id="recordId">
+      <div>
+        <label class="block text-sm font-medium text-textSecondary">Name</label>
+        <input type="text" id="name" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm sm:text-sm"/>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-textSecondary">Type</label>
+        <select id="type" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm sm:text-sm">
+          <option value="Income">Income</option>
+          <option value="Expense">Expense</option>
+          <option value="Investment">Investment</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-textSecondary">Amount</label>
+        <input type="number" id="amount" required min="0.01" step="0.01" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm sm:text-sm"/>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-textSecondary">Date</label>
+        <input type="date" id="date" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm sm:text-sm"/>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-textSecondary">Category</label>
+        <input type="text" id="category" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm sm:text-sm"/>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-textSecondary">Investment Goal</label>
+        <input type="text" id="investmentGoal" placeholder="E.g. Retirement, Education, Savings" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm sm:text-sm"/>
+      </div>
+      <div class="flex justify-end space-x-3 pt-2">
+        <button type="button" onclick="closeModal()" class="px-4 py-2 text-sm text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">Cancel</button>
+        <button type="submit" class="px-4 py-2 text-sm text-white bg-secondary rounded-md hover:bg-green-600">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+let records = JSON.parse(localStorage.getItem('financialRecords') || '[]');
+
+function updateTable() {
+  const tableContainer = document.getElementById('recordsTableContainer');
+  const summaryContainer = document.getElementById('summaryCards');
+  if (!tableContainer || !summaryContainer) return;
+
+  let totalIncome = 0, totalExpenses = 0, totalInvestments = 0;
+
+  records.forEach(r => {
+    if (r.type === 'Income') totalIncome += r.amount;
+    if (r.type === 'Expense') totalExpenses += r.amount;
+    if (r.type === 'Investment') totalInvestments += r.amount;
+  });
+  const net = totalIncome - totalExpenses;
+
+  summaryContainer.innerHTML = `
+    <div class="bg-green-100 p-4 rounded-lg shadow"><h3 class="text-lg font-semibold text-green-700">Total Income</h3><p class="text-2xl text-green-600">$${totalIncome.toFixed(2)}</p></div>
+    <div class="bg-red-100 p-4 rounded-lg shadow"><h3 class="text-lg font-semibold text-red-700">Total Expenses</h3><p class="text-2xl text-red-600">$${totalExpenses.toFixed(2)}</p></div>
+    <div class="bg-blue-100 p-4 rounded-lg shadow"><h3 class="text-lg font-semibold text-blue-700">Total Investments</h3><p class="text-2xl text-blue-600">$${totalInvestments.toFixed(2)}</p></div>
+    <div class="p-4 rounded-lg shadow ${net >= 0 ? 'bg-emerald-100' : 'bg-rose-100'}"><h3 class="text-lg font-semibold ${net >= 0 ? 'text-emerald-700' : 'text-rose-700'}">Net Balance</h3><p class="text-2xl ${net >= 0 ? 'text-emerald-600' : 'text-rose-600'}">$${net.toFixed(2)}</p></div>
+  `;
+
+  if (records.length === 0) {
+    tableContainer.innerHTML = '<p class="text-center text-textSecondary py-10">No records yet. Add one to get started!</p>';
+    return;
+  }
+
+  const rows = records.map(r => `
+    <tr class="hover:bg-gray-50 transition-colors">
+      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-textPrimary">${r.name}</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${r.type === 'Income' ? 'bg-green-100 text-green-800' : r.type === 'Expense' ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'}">${r.type}</span></td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold ${r.type === 'Income' ? 'text-green-600' : r.type === 'Expense' ? 'text-red-600' : 'text-blue-600'}">$${r.amount.toFixed(2)}</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-textSecondary">${r.date}</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-textSecondary">${r.category}</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm text-textSecondary">${r.goal || '-'}</td>
+      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+        <button onclick="editRecord('${r.id}')" class="text-primary hover:text-blue-700"><i class="fas fa-edit"></i> Edit</button>
+        <button onclick="deleteRecord('${r.id}')" class="text-red-600 hover:text-red-800"><i class="fas fa-trash"></i> Delete</button>
+      </td>
+    </tr>
+  `).join('');
+
+  tableContainer.innerHTML = `
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr><th class="px-6 py-3 text-left text-xs font-medium text-textSecondary uppercase tracking-wider">Name</th><th class="px-6 py-3 text-left text-xs font-medium text-textSecondary uppercase tracking-wider">Type</th><th class="px-6 py-3 text-left text-xs font-medium text-textSecondary uppercase tracking-wider">Amount</th><th class="px-6 py-3 text-left text-xs font-medium text-textSecondary uppercase tracking-wider">Date</th><th class="px-6 py-3 text-left text-xs font-medium text-textSecondary uppercase tracking-wider">Category</th><th class="px-6 py-3 text-left text-xs font-medium text-textSecondary uppercase tracking-wider">Goal</th><th class="px-6 py-3 text-left text-xs font-medium text-textSecondary uppercase tracking-wider">Actions</th></tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">${rows}</tbody>
+    </table>
+  `;
+}
+
+function openModal() {
+  document.getElementById('modalBackdrop').classList.remove('hidden');
+  document.getElementById('recordForm').reset();
+  document.getElementById('recordId').value = '';
+  document.getElementById('date').valueAsDate = new Date();
+}
+
+function closeModal() {
+  document.getElementById('modalBackdrop').classList.add('hidden');
+}
+
+document.getElementById('recordForm')?.addEventListener('submit', function(e) {
+  e.preventDefault();
+  const id = document.getElementById('recordId').value || crypto.randomUUID();
+
+  const newRecord = {
+    id,
+    name: document.getElementById('name').value,
+    type: document.getElementById('type').value,
+    amount: parseFloat(document.getElementById('amount').value),
+    date: document.getElementById('date').value,
+    category: document.getElementById('category').value,
+    goal: document.getElementById('investmentGoal').value
+  };
+
+  const existing = records.findIndex(r => r.id === id);
+  if (existing >= 0) {
+    records[existing] = newRecord;
+  } else {
+    records.push(newRecord);
+  }
+
+  localStorage.setItem('financialRecords', JSON.stringify(records));
+  closeModal();
+  updateTable();
+});
+
+function editRecord(id) {
+  const r = records.find(rec => rec.id === id);
+  if (!r) return;
+  openModal();
+  document.getElementById('recordId').value = r.id;
+  document.getElementById('name').value = r.name;
+  document.getElementById('type').value = r.type;
+  document.getElementById('amount').value = r.amount;
+  document.getElementById('date').value = r.date;
+  document.getElementById('category').value = r.category;
+  document.getElementById('investmentGoal').value = r.goal || '';
+}
+
+function deleteRecord(id) {
+  if (!confirm("Are you sure?")) return;
+  records = records.filter(r => r.id !== id);
+  localStorage.setItem('financialRecords', JSON.stringify(records));
+  updateTable();
+}
+
+window.onload = updateTable;
+</script>
+<script>
+  const toggleBtn = document.getElementById('menu-toggle');
+  const navMenu = document.getElementById('nav-menu');
+
+  toggleBtn.addEventListener('click', () => {
+    navMenu.classList.toggle('hidden');
+  });
+</script>
+
+</body>
+</html>

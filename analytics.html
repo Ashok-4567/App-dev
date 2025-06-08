@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Analytics Dashboard - Finance Advisor Pro</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Header & Footer Styles -->
+  <style>
+    .navbar {
+      background-color: #1E3A8A;
+      padding: 1rem 2rem;
+      color: white;
+    }
+
+    .navbar-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: white;
+    }
+
+    .logo i {
+      margin-right: 0.5rem;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+
+    .nav-links a:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .nav-links .active {
+      background-color: #10B981;
+      font-weight: bold;
+    }
+
+    .signup-btn {
+      background-color: #F59E0B;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .signup-btn:hover {
+      background-color: #d97706;
+    }
+
+    .site-footer {
+      background-color: #1E3A8A;
+      color: white;
+      text-align: center;
+      padding: 1.5rem 1rem;
+      font-size: 0.9rem;
+    }
+
+    .footer-sub {
+      font-style: italic;
+      font-size: 0.95rem;
+      margin-top: 0.5rem;
+    }
+
+    /* Dashboard Styles */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #c5c5cb 0%, #e3dfe7 100%);
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .dashboard {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 25px;
+      text-align: center;
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .stat-label {
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+      gap: 25px;
+    }
+
+    .chart-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .chart-container:hover {
+      transform: translateY(-3px);
+    }
+
+    .chart-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .chart-wrapper {
+      position: relative;
+      height: 400px;
+    }
+
+    .controls {
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .btn {
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 14px;
+      margin: 0 5px;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .date-filter {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
+      padding: 10px;
+      color: white;
+      margin: 0 10px;
+    }
+
+    .insights {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 15px;
+      padding: 25px;
+      margin-top: 30px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .insights h3 {
+      color: #333;
+      margin-bottom: 15px;
+    }
+
+    .insight-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      padding: 10px;
+      background: rgba(102, 126, 234, 0.1);
+      border-radius: 8px;
+    }
+
+    .insight-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    .positive { background-color: #4CAF50; }
+    .negative { background-color: #f44336; }
+    .neutral { background-color: #ff9800; }
+
+    @media (max-width: 768px) {
+      .charts-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .header h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Home- Finance Advisor Pro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="styles/style.css" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#1E3A8A',
+            secondary: '#10B981',
+            accent: '#F59E0B',
+            background: '#F3F4F6',
+            card: '#FFFFFF',
+            textPrimary: '#1F2937',
+            textSecondary: '#4B5563'
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-background font-sans text-textPrimary">
+
+   <header class="bg-primary text-white shadow relative z-50">
+  <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+    <div class="flex items-center space-x-2 text-xl font-bold">
+      <i class="fas fa-chart-line text-white"></i>
+      <span>Finance Advisor Pro</span>
+    </div>
+    <!-- Hamburger Button -->
+    <button id="menu-toggle" class="sm:hidden text-2xl focus:outline-none">
+      <i class="fas fa-bars"></i>
+    </button>
+    <!-- Navigation Menu -->
+    <nav id="nav-menu" class="hidden sm:flex flex-col sm:flex-row sm:items-center sm:space-x-4 absolute sm:static top-full left-0 w-full sm:w-auto bg-primary sm:bg-transparent px-4 sm:px-0 py-4 sm:py-0">
+      <a href="index.html" class="block px-4 py-2 rounded hover:bg-white/10 font-semibold bg-green-500 sm:bg-transparent sm:text-white">Home</a>
+      <a href="manage-finances.html" class="block px-4 py-2 rounded hover:bg-white/10">Manage Finances</a>
+      <a href="analytics.html" class="block px-4 py-2 rounded hover:bg-white/10">Analytics</a>
+      <a href="aboutus.html" class="block px-4 py-2 rounded hover:bg-white/10">About Us</a>
+      <a href="auth_modal.html" class="block px-4 py-2 rounded hover:bg-white/10">Sign In</a>
+      <a href="auth_modal.html" class="block px-4 py-2 rounded bg-accent text-white font-bold hover:bg-yellow-500">Sign Up</a>
+    </nav>
+  </div>
+</header>
+
+
+  <!-- ✅ MAIN DASHBOARD -->
+  <div class="dashboard">
+    <div class="header">
+      <h1>📊 Analytics Dashboard</h1>
+      <p>Real-time insights and performance metrics</p>
+    </div>
+
+    <div class="controls">
+      <select class="date-filter" id="dateFilter">
+        <option value="7">Last 7 days</option>
+        <option value="30" selected>Last 30 days</option>
+        <option value="90">Last 90 days</option>
+        <option value="365">Last year</option>
+      </select>
+      <button class="btn" onclick="refreshData()">🔄 Refresh</button>
+      <button class="btn" onclick="exportData()">📥 Export</button>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-number" id="totalUsers">24,367</div><div class="stat-label">Total Users</div></div>
+      <div class="stat-card"><div class="stat-number" id="revenue">$128,450</div><div class="stat-label">Revenue</div></div>
+      <div class="stat-card"><div class="stat-number" id="conversions">15.8%</div><div class="stat-label">Conversion Rate</div></div>
+      <div class="stat-card"><div class="stat-number" id="avgSession">4m 32s</div><div class="stat-label">Avg Session</div></div>
+    </div>
+
+    <div class="charts-grid">
+      <div class="chart-container"><div class="chart-title">Monthly Revenue Trend</div><div class="chart-wrapper"><canvas id="revenueChart"></canvas></div></div>
+      <div class="chart-container"><div class="chart-title">Investment Allocations</div><div class="chart-wrapper"><canvas id="userChart"></canvas></div></div>
+      <div class="chart-container"><div class="chart-title">Traffic Sources</div><div class="chart-wrapper"><canvas id="trafficChart"></canvas></div></div>
+      <div class="chart-container"><div class="chart-title">Finance Goals Progress</div><div class="chart-wrapper"><canvas id="deviceChart"></canvas></div></div>
+      <div class="chart-container"><div class="chart-title">Sales Performance</div><div class="chart-wrapper"><canvas id="salesChart"></canvas></div></div>
+      <div class="chart-container"><div class="chart-title">Growth Metrics</div><div class="chart-wrapper"><canvas id="growthChart"></canvas></div></div>
+    </div>
+
+    <div class="insights">
+      <h3>📈 Key Insights</h3>
+      <div class="insight-item"><div class="insight-icon positive"></div><span>Revenue increased by 23%</span></div>
+      <div class="insight-item"><div class="insight-icon positive"></div><span>Mobile traffic up 18%</span></div>
+      <div class="insight-item"><div class="insight-icon negative"></div><span>Bounce rate up 5%</span></div>
+      <div class="insight-item"><div class="insight-icon neutral"></div><span>Peak traffic: 2–4 PM</span></div>
+    </div>
+  </div>
+
+  <!-- ✅ FOOTER -->
+  <footer class="site-footer">
+    <p>&copy; 2025 Finance Advisor Pro. All rights reserved.</p>
+    <p class="footer-sub">Empowering Your Financial Journey</p>
+  </footer>
+
+  <!-- ✅ SCRIPTS -->
+  <script>
+    const chartOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { position: 'top' } }
+    };
+
+    const revenueChart = new Chart(document.getElementById('revenueChart'), {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        datasets: [{ label: 'Revenue ($)', data: [15000, 22000, 18000, 28000, 25000, 32000], borderColor: 'rgb(102,126,234)', backgroundColor: 'rgba(102,126,234,0.1)', tension: 0.4, fill: true }]
+      },
+      options: chartOptions
+    });
+
+    const userChart = new Chart(document.getElementById('userChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+        datasets: [{ label: 'New Users', data: [1200, 1900, 1500, 2100], backgroundColor: 'rgba(118,75,162,0.8)', borderColor: 'rgb(118,75,162)', borderWidth: 1 }]
+      },
+      options: chartOptions
+    });
+
+    const trafficChart = new Chart(document.getElementById('trafficChart'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Organic Search', 'Direct', 'Social Media', 'Referral', 'Email'],
+        datasets: [{ data: [35, 25, 20, 15, 5], backgroundColor: ['#667eea', '#764ba2', '#f093fb', '#f5576c', '#4facfe'] }]
+      },
+      options: chartOptions
+    });
+
+    const deviceChart = new Chart(document.getElementById('deviceChart'), {
+      type: 'pie',
+      data: {
+        labels: ['Housing', 'Bonds', 'Stocks'],
+        datasets: [{ data: [45, 40, 15], backgroundColor: ['#667eea', '#764ba2', '#f093fb'] }]
+      },
+      options: chartOptions
+    });
+
+    const salesChart = new Chart(document.getElementById('salesChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Education', 'Real estate', 'Mutual Funds', 'Gold', 'Loan'],
+        datasets: [{ label: 'Sales', data: [65, 59, 80, 81, 56], backgroundColor: ['rgba(255,99,132,0.8)', 'rgba(54,162,235,0.8)', 'rgba(255,205,86,0.8)', 'rgba(75,192,192,0.8)', 'rgba(153,102,255,0.8)'] }]
+      },
+      options: chartOptions
+    });
+
+    const growthChart = new Chart(document.getElementById('growthChart'), {
+      type: 'line',
+      data: {
+        labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+        datasets: [
+          { label: 'Revenue Growth (%)', data: [15, 25, 20, 30], borderColor: 'rgb(255,99,132)', backgroundColor: 'rgba(255,99,132,0.1)', tension: 0.1 },
+          { label: 'User Growth (%)', data: [10, 18, 15, 22], borderColor: 'rgb(54,162,235)', backgroundColor: 'rgba(54,162,235,0.1)', tension: 0.1 }
+        ]
+      },
+      options: chartOptions
+    });
+
+    function refreshData() {
+      [revenueChart, userChart, salesChart, growthChart].forEach(chart => {
+        chart.data.datasets.forEach(d => d.data = d.data.map(() => Math.floor(Math.random() * 100) + 10));
+        chart.update();
+      });
+      document.getElementById('totalUsers').textContent = (Math.floor(Math.random() * 50000) + 10000).toLocaleString();
+      document.getElementById('revenue').textContent = '$' + (Math.floor(Math.random() * 200000) + 50000).toLocaleString();
+      document.getElementById('conversions').textContent = (Math.random() * 20 + 5).toFixed(1) + '%';
+    }
+
+    function exportData() {
+      alert('Export functionality will be added here.');
+    }
+
+    document.getElementById('dateFilter').addEventListener('change', refreshData);
+  </script>
+  <script>
+  const toggleBtn = document.getElementById('menu-toggle');
+  const navMenu = document.getElementById('nav-menu');
+
+  toggleBtn.addEventListener('click', () => {
+    navMenu.classList.toggle('hidden');
+  });
+</script>
+</body>
+</html>
